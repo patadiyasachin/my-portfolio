@@ -93,7 +93,7 @@ function App() {
   }, []);
 
   return <div ref={root}>
-    <nav className="nav"><a className="brand" href="#top">SP<span>.</span></a><div className="nav-links"><a href="#about">About</a><a href="#work">Work</a><a href="#contact">Contact</a></div><div className="nav-actions"><button className="theme-toggle" type="button" onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`} title={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}>{theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}</button><a className="nav-cta" href="https://www.linkedin.com/in/sachinpatadiya" target="_blank" rel="noreferrer">Let's talk <ArrowUpRight size={16} /></a></div></nav>
+    <nav className="nav"><a className="brand" href="#top">SP<span>.</span></a><div className="nav-links"><a href="#about">About</a><a href="#work">Work</a><a href="#contact">Contact</a></div><div className="nav-actions"><button className="theme-toggle" type="button" onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`} title={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}>{theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}</button><a className="nav-cta" href="https://www.linkedin.com/in/sachin-patadiya-308608253" target="_blank" rel="noreferrer">Let's talk <ArrowUpRight size={16} /></a></div></nav>
     <main>
       <section ref={hero} id="top" className="hero">
         <div className="scene-wrap"><Scene theme={theme} /></div>
@@ -119,7 +119,7 @@ function App() {
 
       <section className="section philosophy"><div className="big-statement reveal">Good products feel<br /><span>simple.</span> Great ones<br />feel <span>alive.</span></div></section>
 
-      <section id="contact" className="section contact"><div className="section-label reveal">03 / CONTACT</div><div className="contact-inner"><p className="eyebrow reveal">HAVE A PROJECT IN MIND?</p><h2 className="reveal">Let's make<br /><em>something memorable.</em></h2><a className="primary-btn reveal" href="https://www.linkedin.com/in/sachinpatadiya" target="_blank" rel="noreferrer">Start a conversation <Linkedin size={18} /></a><div className="socials reveal"><a href="https://github.com/patadiyasachin" target="_blank" rel="noreferrer"><Github size={19} /> GitHub</a><a href="https://www.linkedin.com/in/sachinpatadiya" target="_blank" rel="noreferrer"><Linkedin size={19} /> LinkedIn</a></div></div></section>
+      <section id="contact" className="section contact"><div className="section-label reveal">03 / CONTACT</div><div className="contact-inner"><p className="eyebrow reveal">HAVE A PROJECT IN MIND?</p><h2 className="reveal">Let's make<br /><em>something memorable.</em></h2><a className="primary-btn reveal" href="https://www.linkedin.com/in/sachin-patadiya-308608253" target="_blank" rel="noreferrer">Start a conversation <Linkedin size={18} /></a><div className="socials reveal"><a href="https://github.com/patadiyasachin" target="_blank" rel="noreferrer"><Github size={19} /> GitHub</a><a href="https://www.linkedin.com/in/sachin-patadiya-308608253" target="_blank" rel="noreferrer"><Linkedin size={19} /> LinkedIn</a></div></div></section>
     </main>
     <footer><span>© {new Date().getFullYear()} Sachin Patadiya</span><span>Built with React + Three.js</span></footer>
   </div>;
