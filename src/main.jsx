@@ -121,7 +121,7 @@ function App() {
 
       <section id="contact" className="section contact"><div className="section-label reveal">03 / CONTACT</div><div className="contact-inner"><p className="eyebrow reveal">HAVE A PROJECT IN MIND?</p><h2 className="reveal">Let's make<br /><em>something memorable.</em></h2><a className="primary-btn reveal" href="https://www.linkedin.com/in/sachin-patadiya-308608253" target="_blank" rel="noreferrer">Start a conversation <Linkedin size={18} /></a><div className="socials reveal"><a href="https://github.com/patadiyasachin" target="_blank" rel="noreferrer"><Github size={19} /> GitHub</a><a href="https://www.linkedin.com/in/sachin-patadiya-308608253" target="_blank" rel="noreferrer"><Linkedin size={19} /> LinkedIn</a></div></div></section>
     </main>
-    <footer><span>© {new Date().getFullYear()} Sachin Patadiya</span><span>Built with React + Three.js</span></footer>
+    <footer><span>© {new Date().getFullYear()} Sachin Patadiya</span></footer>
   </div>;
 }
 
