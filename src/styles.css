@@ -17,7 +17,7 @@
     --accent-strong: #1f654b;
     --button-text: #ffffff;
     --nav-bg: rgba(247, 249, 246, .88);
-    --hero-overlay: radial-gradient(circle at 60% 45%, transparent 0, rgba(245, 248, 244, .05) 34%, rgba(245, 248, 244, .72) 100%);
+    --hero-overlay: radial-gradient(circle at 62% 45%, transparent 0, rgba(245, 248, 244, .08) 42%, rgba(245, 248, 244, .48) 100%);
     --card-bg: linear-gradient(145deg, #ffffff, #f7faf6);
     --card-shadow: 0 16px 42px rgba(35, 63, 45, .055);
     --card-shadow-hover: 0 24px 54px rgba(35, 63, 45, .12)
@@ -36,7 +36,7 @@
     --accent-strong: #a1dcb9;
     --button-text: #102018;
     --nav-bg: rgba(17, 23, 19, .88);
-    --hero-overlay: radial-gradient(circle at 60% 45%, transparent 0, rgba(21, 29, 24, .08) 34%, rgba(21, 29, 24, .78) 100%);
+    --hero-overlay: radial-gradient(circle at 62% 45%, transparent 0, rgba(21, 29, 24, .08) 42%, rgba(21, 29, 24, .5) 100%);
     --card-bg: linear-gradient(145deg, #202b24, #19221c);
     --card-shadow: 0 16px 42px rgba(0, 0, 0, .16);
     --card-shadow-hover: 0 24px 54px rgba(0, 0, 0, .3)
@@ -79,13 +79,42 @@ a {
 }
 
 .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
     font-size: 24px;
     font-weight: 800;
     letter-spacing: 0
 }
 
-.brand span {
+.brand-monogram {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--surface-raised);
+    color: var(--text);
+    font-size: 18px;
+    transition: transform .2s ease, border-color .2s ease
+}
+
+.brand-monogram span:last-child {
     color: var(--accent)
+}
+
+.brand:hover .brand-monogram {
+    border-color: var(--accent);
+    transform: translateY(-2px) rotate(-3deg)
+}
+
+.brand-name {
+    color: var(--text-muted);
+    font: 500 10px/1.35 'DM Mono', monospace;
+    text-transform: uppercase
 }
 
 .nav-links {
@@ -169,7 +198,7 @@ a {
 .hero-copy {
     position: relative;
     z-index: 2;
-    max-width: 850px
+    max-width: 680px
 }
 
 .eyebrow,
@@ -181,12 +210,36 @@ a {
     color: var(--text-muted)
 }
 
-.hero h1 {
-    font-size: clamp(58px, 8.3vw, 132px);
-    line-height: .9;
-    letter-spacing: 0;
+.hero-title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
     margin: 22px 0 28px;
-    font-weight: 700
+    line-height: 1
+}
+
+.hero-intro {
+    color: var(--text-muted);
+    font: 500 13px 'DM Mono', monospace;
+    letter-spacing: .1em;
+    text-transform: uppercase
+}
+
+.hero-name {
+    display: block;
+    font-size: clamp(72px, 10vw, 148px);
+    font-weight: 800;
+    line-height: .82;
+    color: var(--text)
+}
+
+.hero-surname {
+    color: var(--accent)
+}
+
+.hero-name-dot {
+    color: var(--accent)
 }
 
 .hero h1 em,
@@ -498,6 +551,16 @@ footer {
         display: none
     }
 
+    .brand-monogram {
+        width: 40px;
+        height: 40px;
+        flex-basis: 40px
+    }
+
+    .brand-name {
+        display: none
+    }
+
     .nav-cta {
         padding: 9px 12px
     }
@@ -507,8 +570,8 @@ footer {
         min-height: 680px
     }
 
-    .hero h1 {
-        font-size: clamp(46px, 13vw, 78px)
+    .hero-name {
+        font-size: clamp(54px, 13vw, 92px)
     }
 
     .hero-sub {
@@ -568,7 +631,7 @@ footer {
     }
 
     .scene {
-        opacity: .6
+        opacity: .32
     }
 
     footer {
@@ -597,8 +660,8 @@ footer {
         min-width: 0
     }
 
-    .hero h1 {
-        font-size: clamp(26px, 10vw, 42px)
+    .hero-name {
+        font-size: clamp(38px, 15vw, 64px)
     }
 
     .about h2,

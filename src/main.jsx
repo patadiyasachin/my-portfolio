@@ -28,6 +28,26 @@ function Orb({ position, color, scale = 1 }) {
   </mesh>;
 }
 
+function OrbitRings({ theme }) {
+  const ref = useRef();
+  useFrame((_, delta) => {
+    ref.current.rotation.y += delta * 0.12;
+    ref.current.rotation.z += delta * 0.08;
+  });
+  const ringColor = theme === 'dark' ? '#a1dcb9' : '#287b5d';
+
+  return <group ref={ref} position={[2.1, 0.1, 0]}>
+    <mesh rotation={[0.95, 0.25, 0.2]}>
+      <torusGeometry args={[1.7, 0.012, 12, 120]} />
+      <meshStandardMaterial color={ringColor} metalness={0.65} roughness={0.3} transparent opacity={0.72} />
+    </mesh>
+    <mesh rotation={[0.3, 1.15, 0.8]}>
+      <torusGeometry args={[2.05, 0.009, 12, 120]} />
+      <meshStandardMaterial color="#8dbacb" metalness={0.6} roughness={0.35} transparent opacity={0.56} />
+    </mesh>
+  </group>;
+}
+
 function Scene({ theme }) {
   return <Canvas className="scene" camera={{ position: [0, 0, 7], fov: 42 }} dpr={[1, 1.6]} gl={{ antialias: true }}>
     <color attach="background" args={[theme === 'dark' ? '#151d18' : '#f5f8f4']} />
@@ -36,13 +56,14 @@ function Scene({ theme }) {
     <pointLight position={[-4, -2, 2]} intensity={8} color="#69b99b" />
     <Suspense fallback={null}>
       <Float speed={1.6} rotationIntensity={0.5} floatIntensity={0.8}>
-        <Orb position={[0.9, 0.15, 0]} color="#a6d6bf" scale={1.3} />
+        <Orb position={[2.1, 0.1, 0]} color={theme === 'dark' ? '#80bd9b' : '#a6d6bf'} scale={1.25} />
       </Float>
+      <OrbitRings theme={theme} />
       <Float speed={2.1} rotationIntensity={0.8} floatIntensity={1}>
-        <Orb position={[-2.8, 1.45, -1.4]} color="#8dbacb" scale={0.48} />
+        <Orb position={[3.7, 1.55, -1.4]} color="#8dbacb" scale={0.38} />
       </Float>
       <Float speed={1.5} rotationIntensity={0.5} floatIntensity={0.9}>
-        <Orb position={[2.9, -1.45, -1.1]} color="#e4c58e" scale={0.58} />
+        <Orb position={[0.6, -2.4, -1.1]} color="#e4c58e" scale={0.46} />
       </Float>
       <Sparkles count={60} scale={11} size={1.2} speed={0.25} color={theme === 'dark' ? '#a2dbbb' : '#79a58f'} />
       <Environment preset="city" />
@@ -93,14 +114,14 @@ function App() {
   }, []);
 
   return <div ref={root}>
-    <nav className="nav"><a className="brand" href="#top">SP<span>.</span></a><div className="nav-links"><a href="#about">About</a><a href="#work">Work</a><a href="#contact">Contact</a></div><div className="nav-actions"><button className="theme-toggle" type="button" onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`} title={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}>{theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}</button><a className="nav-cta" href="https://www.linkedin.com/in/sachin-patadiya-308608253" target="_blank" rel="noreferrer">Let's talk <ArrowUpRight size={16} /></a></div></nav>
+    <nav className="nav"><a className="brand" href="#top" aria-label="Sachin Patadiya home"><span className="brand-monogram" aria-hidden="true"><span>S</span><span>P</span></span><span className="brand-name">Sachin<br />Patadiya</span></a><div className="nav-links"><a href="#about">About</a><a href="#work">Work</a><a href="#contact">Contact</a></div><div className="nav-actions"><button className="theme-toggle" type="button" onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`} title={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}>{theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}</button><a className="nav-cta" href="https://www.linkedin.com/in/sachin-patadiya-308608253" target="_blank" rel="noreferrer">Let's talk <ArrowUpRight size={16} /></a></div></nav>
     <main>
       <section ref={hero} id="top" className="hero">
         <div className="scene-wrap"><Scene theme={theme} /></div>
         <div className="hero-copy">
           <p className="eyebrow">FLUTTER • MERN • CREATIVE DEVELOPMENT</p>
-          <h1>Building digital<br /><em>experiences</em> that move.</h1>
-          <p className="hero-sub">I'm Sachin — a developer who turns ideas into polished mobile and web products.</p>
+          <h1 className="hero-title"><span className="hero-intro">Hello, I'm</span><span className="hero-name">Sachin<br /><span className="hero-surname">Patadiya</span><span className="hero-name-dot">.</span></span></h1>
+          <p className="hero-sub">I build thoughtful mobile and web experiences, blending clean engineering with a strong sense of design.</p>
           <a className="primary-btn" href="#work">Explore my work <ArrowDown size={18} /></a>
         </div>
         <div className="scroll-cue">SCROLL TO EXPLORE <ArrowDown size={15} /></div>
