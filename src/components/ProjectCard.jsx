@@ -20,8 +20,8 @@ const ProjectVisual = ({ project }) => (
 
 export default function ProjectCard({ project, index, onView }) {
     const Icon = project.icon;
-    return (
-        <article className={`project-card project-card--${project.accent} reveal`}>
+    const cardContent = (
+        <>
             <div className="project-card__top">
                 <div className="project-icon" aria-hidden="true"><Icon size={22} /></div>
                 <span className="project-index">0{index + 1}</span>
@@ -38,12 +38,17 @@ export default function ProjectCard({ project, index, onView }) {
                     {project.features.slice(0, 3).map((feature) => <span key={feature}>{feature}</span>)}
                 </div>
                 <div className="project-card__actions">
-                    <button className="text-link" type="button" onClick={() => onView(project)}>
-                        View project <ArrowUpRight size={16} />
-                    </button>
+                    {project.url
+                        ? <span className="text-link">Open project <ArrowUpRight size={16} /></span>
+                        : <button className="text-link" type="button" onClick={() => onView(project)}>View project <ArrowUpRight size={16} /></button>}
                     {project.github && <a className="text-link" href={project.github} target="_blank" rel="noreferrer"><Github size={16} /> GitHub</a>}
                 </div>
             </div>
-        </article>
+        </>
     );
+
+    const cardClassName = `project-card project-card--${project.accent} reveal`;
+    return project.url
+        ? <a className={cardClassName} href={project.url} target="_blank" rel="noreferrer" aria-label={`Open ${project.title}`}>{cardContent}</a>
+        : <article className={cardClassName}>{cardContent}</article>;
 }
