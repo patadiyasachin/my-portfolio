@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ArrowUpRight, Github, X } from 'lucide-react';
+import { ArrowUpRight, ExternalLink, Github, X } from 'lucide-react';
 
 export default function ProjectModal({ project, onClose }) {
     useEffect(() => {
@@ -38,7 +38,8 @@ export default function ProjectModal({ project, onClose }) {
                     <article><p className="case-label">Challenges & approach</p><p>Balanced product complexity with focused UI, kept integration boundaries clear, and validated workflows through practical development and testing.</p></article>
                 </div>
                 <div className="modal-actions">
-                    {project.github && <a className="primary-btn" href={project.github} target="_blank" rel="noreferrer"><Github size={17} /> View GitHub</a>}
+                    {project.url && <a className="primary-btn" href={project.url} target="_blank" rel="noreferrer"><ExternalLink size={17} /> Live demo</a>}
+                    {project.github && <a className="secondary-btn" href={project.github} target="_blank" rel="noreferrer"><Github size={17} /> View GitHub</a>}
                     <button className="secondary-btn" type="button" onClick={onClose}>Back to projects <ArrowUpRight size={17} /></button>
                 </div>
             </section>

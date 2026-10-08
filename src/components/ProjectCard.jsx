@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight, Github } from 'lucide-react';
+import { ArrowUpRight, ExternalLink, Github } from 'lucide-react';
 
 const ProjectVisual = ({ project }) => (
     <div className={`project-visual project-visual--${project.visual}`} aria-hidden="true">
@@ -39,7 +39,7 @@ export default function ProjectCard({ project, index, onView }) {
                 </div>
                 <div className="project-card__actions">
                     {project.url
-                        ? <span className="text-link">Open project <ArrowUpRight size={16} /></span>
+                        ? <a className="text-link" href={project.url} target="_blank" rel="noreferrer">Live demo <ExternalLink size={16} /></a>
                         : <button className="text-link" type="button" onClick={() => onView(project)}>View project <ArrowUpRight size={16} /></button>}
                     {project.github && <a className="text-link" href={project.github} target="_blank" rel="noreferrer"><Github size={16} /> GitHub</a>}
                 </div>
@@ -48,7 +48,5 @@ export default function ProjectCard({ project, index, onView }) {
     );
 
     const cardClassName = `project-card project-card--${project.accent} reveal`;
-    return project.url
-        ? <a className={cardClassName} href={project.url} target="_blank" rel="noreferrer" aria-label={`Open ${project.title}`}>{cardContent}</a>
-        : <article className={cardClassName}>{cardContent}</article>;
+    return <article className={cardClassName}>{cardContent}</article>;
 }
