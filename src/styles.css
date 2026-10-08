@@ -1776,14 +1776,15 @@ footer p {
 
     footer {
         padding: 30px 22px;
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 24px;
     }
 
-    .footer-links,
-    footer p,
-    .footer-signature {
-        grid-column: 1;
-        grid-row: auto
+    .footer-links {
+        flex-wrap: wrap;
+        gap: 14px 20px;
     }
 }
 
