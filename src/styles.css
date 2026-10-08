@@ -1898,6 +1898,137 @@ footer {
     text-transform: uppercase
 }
 
+/* Premium interaction layer */
+.has-custom-cursor,
+.has-custom-cursor body,
+.has-custom-cursor a,
+.has-custom-cursor button {
+    cursor: none;
+}
+
+.cursor-dot,
+.cursor-ring {
+    position: fixed;
+    z-index: 200;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    border-radius: 50%;
+    transform: translate3d(-100px, -100px, 0);
+}
+
+.cursor-dot {
+    width: 6px;
+    height: 6px;
+    margin: -3px 0 0 -3px;
+    background: var(--accent);
+    box-shadow: 0 0 18px var(--accent);
+}
+
+.cursor-ring {
+    width: 34px;
+    height: 34px;
+    margin: -17px 0 0 -17px;
+    border: 1px solid color-mix(in srgb, var(--accent) 65%, transparent);
+    transition: width .25s ease, height .25s ease, margin .25s ease, background .25s ease;
+}
+
+.cursor-ring--active {
+    width: 52px;
+    height: 52px;
+    margin: -26px 0 0 -26px;
+    background: color-mix(in srgb, var(--accent) 13%, transparent);
+}
+
+.hero:before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: .35;
+    background-image: linear-gradient(color-mix(in srgb, var(--accent) 10%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--accent) 10%, transparent) 1px, transparent 1px);
+    background-size: 90px 90px;
+    mask-image: linear-gradient(to bottom, black, transparent 80%);
+}
+
+.scene-wrap {
+    background: radial-gradient(circle at 72% 40%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 38%);
+}
+
+.primary-btn,
+.nav-cta,
+.project-card,
+.technology-card,
+.about-highlight,
+.education-card {
+    transition: transform .35s cubic-bezier(.2, .7, .2, 1), border-color .35s ease, box-shadow .35s ease, background .35s ease;
+}
+
+.primary-btn {
+    box-shadow: 0 10px 30px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.primary-btn:hover {
+    box-shadow: 0 15px 38px color-mix(in srgb, var(--accent) 34%, transparent);
+}
+
+.project-card {
+    position: relative;
+    transform: perspective(1000px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+.project-card:after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    opacity: 0;
+    background: radial-gradient(circle at var(--spot-x, 50%) var(--spot-y, 50%), color-mix(in srgb, var(--accent) 18%, transparent), transparent 35%);
+    transition: opacity .35s ease;
+}
+
+.project-card:hover:after {
+    opacity: 1;
+}
+
+.project-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+.project-card:hover .project-device {
+    transform: translate(-50%, -50%) rotate(-2deg) translateZ(16px) scale(1.04);
+}
+
+.technology-card:hover,
+.about-highlight:hover,
+.education-card:hover {
+    transform: translateY(-8px) rotateX(1deg);
+    box-shadow: 0 25px 60px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+@media (max-width: 800px), (pointer: coarse) {
+    .cursor-dot,
+    .cursor-ring {
+        display: none;
+    }
+
+    .hero:before {
+        opacity: .14;
+        background-size: 55px 55px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero:before {
+        display: none;
+    }
+}
+
 @media(max-width:800px) {
     .nav {
         height: 68px;

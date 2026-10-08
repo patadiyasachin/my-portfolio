@@ -58,14 +58,54 @@ function SceneContent({ theme }) {
 
 function CameraRig() {
   const { camera, viewport } = useThree();
+  const target = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     const isMobile = viewport.width < 6;
     camera.position.set(0, 0, isMobile ? 6.5 : 7);
     camera.lookAt(0, 0, 0);
+    const onPointerMove = (event) => {
+      target.current.x = (event.clientX / window.innerWidth - 0.5) * 0.35;
+      target.current.y = (event.clientY / window.innerHeight - 0.5) * 0.22;
+    };
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    return () => window.removeEventListener('pointermove', onPointerMove);
   }, [camera, viewport.width]);
 
+  useFrame(() => {
+    camera.position.x += (target.current.x - camera.position.x) * 0.025;
+    camera.position.y += (-target.current.y - camera.position.y) * 0.025;
+    camera.lookAt(0, 0, 0);
+  });
+
   return null;
+}
+
+function CustomCursor() {
+  const cursor = useRef(null);
+  const ring = useRef(null);
+
+  useEffect(() => {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return undefined;
+    const onMove = (event) => {
+      cursor.current?.style.setProperty('transform', `translate3d(${event.clientX}px, ${event.clientY}px, 0)`);
+      ring.current?.style.setProperty('transform', `translate3d(${event.clientX}px, ${event.clientY}px, 0)`);
+    };
+    const onOver = (event) => {
+      const target = event.target.closest('a, button, [data-cursor]');
+      ring.current?.classList.toggle('cursor-ring--active', Boolean(target));
+    };
+    window.addEventListener('pointermove', onMove, { passive: true });
+    document.addEventListener('mouseover', onOver);
+    document.documentElement.classList.add('has-custom-cursor');
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      document.removeEventListener('mouseover', onOver);
+      document.documentElement.classList.remove('has-custom-cursor');
+    };
+  }, []);
+
+  return <><span ref={cursor} className="cursor-dot" aria-hidden="true" /><span ref={ring} className="cursor-ring" aria-hidden="true" /></>;
 }
 
 function Scene({ theme, onReady }) {
@@ -125,6 +165,7 @@ function App() {
   const closeMenu = () => setMenuOpen(false);
 
   return <div ref={root}>
+    <CustomCursor />
     <nav className="nav" aria-label="Main navigation">
       <a className="brand" href="#top" aria-label="Sachin Patadiya home"><span className="brand-monogram" aria-hidden="true"><span>S</span><span>P</span></span><span className="brand-name">Sachin<br />Patadiya</span></a>
       <div className={`nav-links ${menuOpen ? 'nav-links--open' : ''}`}>

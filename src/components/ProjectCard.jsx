@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { ArrowUpRight, Github } from 'lucide-react';
 
 const ProjectVisual = ({ project }) => (
@@ -20,8 +20,26 @@ const ProjectVisual = ({ project }) => (
 
 export default function ProjectCard({ project, index, onView }) {
     const Icon = project.icon;
+    const cardRef = useRef(null);
+    const handleMove = (event) => {
+        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+        const rect = cardRef.current?.getBoundingClientRect();
+        if (!rect) return;
+        const x = (event.clientX - rect.left) / rect.width - 0.5;
+        const y = (event.clientY - rect.top) / rect.height - 0.5;
+        cardRef.current.style.setProperty('--tilt-x', `${y * -5}deg`);
+        cardRef.current.style.setProperty('--tilt-y', `${x * 5}deg`);
+        cardRef.current.style.setProperty('--spot-x', `${(x + 0.5) * 100}%`);
+        cardRef.current.style.setProperty('--spot-y', `${(y + 0.5) * 100}%`);
+    };
+    const resetTilt = () => {
+        if (!cardRef.current) return;
+        cardRef.current.style.setProperty('--tilt-x', '0deg');
+        cardRef.current.style.setProperty('--tilt-y', '0deg');
+    };
+
     return (
-        <article className={`project-card project-card--${project.accent} reveal`}>
+        <article ref={cardRef} data-cursor className={`project-card project-card--${project.accent} reveal`} onPointerMove={handleMove} onPointerLeave={resetTilt}>
             <div className="project-card__top">
                 <div className="project-icon" aria-hidden="true"><Icon size={22} /></div>
                 <span className="project-index">0{index + 1}</span>
