@@ -40,6 +40,25 @@ export const experience = {
         'Task and ticket management using Microsoft Azure',
         'Maintaining applications from initial development through support',
     ],
+    technologies: ['Flutter', 'Dart', 'Provider', 'Riverpod', 'Firebase', 'Azure'],
+};
+
+export const currentExperience = {
+    company: 'GNWebSoft',
+    role: 'Full Stack Developer',
+    period: 'Current role',
+    summary: 'Building responsive web applications across the frontend, backend, databases, and integration layers.',
+    responsibilities: [
+        'Developing modern web applications',
+        'Building responsive user interfaces',
+        'Designing and integrating REST APIs',
+        'Working with Node.js and Express.js',
+        'Building database-backed application workflows',
+        'Debugging and testing application features',
+        'Collaborating through Git and pull-request workflows',
+        'Supporting complete application delivery',
+    ],
+    technologies: ['React', 'Node.js', 'Express.js', 'MongoDB', 'JavaScript', 'Git'],
 };
 
 export const projects = [

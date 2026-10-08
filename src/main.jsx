@@ -1,12 +1,12 @@
 import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, Environment, Sparkles, MeshDistortMaterial } from '@react-three/drei';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Float, Sparkles, MeshDistortMaterial } from '@react-three/drei';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import { ArrowDown, ArrowUpRight, Github, Linkedin, Menu, Moon, Server, Sun, X } from 'lucide-react';
-import { aboutHighlights, education, experience, journey, profile, projects, technologyGroups } from './data';
+import { aboutHighlights, currentExperience, education, experience, journey, profile, projects, technologyGroups } from './data';
 import ProjectCard from './components/ProjectCard';
 import ProjectModal from './components/ProjectModal';
 import './styles.css';
@@ -43,17 +43,37 @@ function OrbitRings({ theme }) {
   </group>;
 }
 
-function Scene({ theme }) {
-  return <Canvas className="scene" camera={{ position: [0, 0, 7], fov: 42 }} dpr={[1, 1.6]} gl={{ antialias: true }}>
+function SceneContent({ theme }) {
+  const { viewport } = useThree();
+  const isMobile = viewport.width < 6;
+
+  return <group scale={isMobile ? 0.78 : 1} position={[isMobile ? -0.15 : 0, 0, 0]}>
+    <Float speed={1.6} rotationIntensity={0.5} floatIntensity={0.8}><Orb position={[2.1, 0.1, 0]} color={theme === 'dark' ? '#80bd9b' : '#a6d6bf'} scale={1.25} /></Float>
+    <OrbitRings theme={theme} />
+    <Float speed={2.1} rotationIntensity={0.8} floatIntensity={1}><Orb position={[3.7, 1.55, -1.4]} color="#8dbacb" scale={0.38} /></Float>
+    <Float speed={1.5} rotationIntensity={0.5} floatIntensity={0.9}><Orb position={[0.6, -2.4, -1.1]} color="#e4c58e" scale={0.46} /></Float>
+    <Sparkles count={60} scale={11} size={1.2} speed={0.25} color={theme === 'dark' ? '#a2dbbb' : '#79a58f'} />
+  </group>;
+}
+
+function CameraRig() {
+  const { camera, viewport } = useThree();
+
+  useEffect(() => {
+    const isMobile = viewport.width < 6;
+    camera.position.set(0, 0, isMobile ? 6.5 : 7);
+    camera.lookAt(0, 0, 0);
+  }, [camera, viewport.width]);
+
+  return null;
+}
+
+function Scene({ theme, onReady }) {
+  return <Canvas className="scene" camera={{ position: [0, 0, 7], fov: 42 }} dpr={[1, 1.5]} gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }} onCreated={() => onReady()}>
     <color attach="background" args={[theme === 'dark' ? '#151d18' : '#f5f8f4']} />
     <ambientLight intensity={1.8} /><directionalLight position={[4, 5, 5]} intensity={3.5} color="#ffffff" /><pointLight position={[-4, -2, 2]} intensity={8} color="#69b99b" />
-    <Suspense fallback={null}>
-      <Float speed={1.6} rotationIntensity={0.5} floatIntensity={0.8}><Orb position={[2.1, 0.1, 0]} color={theme === 'dark' ? '#80bd9b' : '#a6d6bf'} scale={1.25} /></Float>
-      <OrbitRings theme={theme} />
-      <Float speed={2.1} rotationIntensity={0.8} floatIntensity={1}><Orb position={[3.7, 1.55, -1.4]} color="#8dbacb" scale={0.38} /></Float>
-      <Float speed={1.5} rotationIntensity={0.5} floatIntensity={0.9}><Orb position={[0.6, -2.4, -1.1]} color="#e4c58e" scale={0.46} /></Float>
-      <Sparkles count={60} scale={11} size={1.2} speed={0.25} color={theme === 'dark' ? '#a2dbbb' : '#79a58f'} /><Environment preset="city" />
-    </Suspense>
+    <CameraRig />
+    <Suspense fallback={null}><SceneContent theme={theme} /></Suspense>
   </Canvas>;
 }
 
@@ -64,6 +84,7 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('top');
   const [selectedProject, setSelectedProject] = useState(null);
+  const [sceneReady, setSceneReady] = useState(false);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -117,7 +138,10 @@ function App() {
     </nav>
     <main>
       <section ref={hero} id="top" className="hero">
-        <div className="scene-wrap"><Scene theme={theme} /></div>
+        <div className={`scene-wrap ${sceneReady ? 'scene-wrap--ready' : ''}`}>
+          <Scene theme={theme} onReady={() => setSceneReady(true)} />
+          {!sceneReady && <div className="scene-loader" role="status" aria-live="polite"><span /><p>Loading 3D experience</p></div>}
+        </div>
         <div className="hero-copy">
           <p className="eyebrow">FLUTTER • MERN • CREATIVE DEVELOPMENT</p>
           <h1 className="hero-title"><span className="hero-intro">Hello, I'm</span><span className="hero-name">Sachin<br /><span className="hero-surname">Patadiya</span><span className="hero-name-dot">.</span></span></h1>
@@ -140,9 +164,10 @@ function App() {
       </section>
 
       <section id="experience" className="section experience">
-        <div className="section-heading reveal"><div><p className="eyebrow">03 / EXPERIENCE</p><h2>Building with<br /><span>purpose.</span></h2></div><p>Hands-on experience across mobile development, API integration, state management, testing, and live project delivery.</p></div>
+        <div className="section-heading reveal"><div><p className="eyebrow">03 / EXPERIENCE</p><h2>Building with<br /><span>purpose.</span></h2></div><p>Hands-on experience across mobile development, full-stack development, API integration, state management, testing, and live project delivery.</p></div>
         <div className="timeline">
-          <article className="timeline-item reveal"><div className="timeline-marker"><span /></div><div className="timeline-company"><span>{experience.period}</span><h3>{experience.company}</h3><p className="timeline-role">{experience.role}</p></div><div className="timeline-content"><p>{experience.summary}</p><ul>{experience.responsibilities.map((item) => <li key={item}>{item}</li>)}</ul><div className="tech-tags">{['Flutter', 'Dart', 'Provider', 'Riverpod', 'Firebase', 'Azure'].map((tag) => <span key={tag}>{tag}</span>)}</div></div></article>
+          <article className="timeline-item reveal"><div className="timeline-marker"><span /></div><div className="timeline-company"><span>{experience.period}</span><h3>{experience.company}</h3><p className="timeline-role">{experience.role}</p></div><div className="timeline-content"><p>{experience.summary}</p><ul>{experience.responsibilities.map((item) => <li key={item}>{item}</li>)}</ul><div className="tech-tags">{experience.technologies.map((tag) => <span key={tag}>{tag}</span>)}</div></div></article>
+          <article className="timeline-item reveal"><div className="timeline-marker"><span /></div><div className="timeline-company"><span>{currentExperience.period}</span><h3>{currentExperience.company}</h3><p className="timeline-role">{currentExperience.role}</p></div><div className="timeline-content"><p>{currentExperience.summary}</p><ul>{currentExperience.responsibilities.map((item) => <li key={item}>{item}</li>)}</ul><div className="tech-tags">{currentExperience.technologies.map((tag) => <span key={tag}>{tag}</span>)}</div></div></article>
         </div>
       </section>
 
@@ -170,7 +195,7 @@ function App() {
         <div className="contact-details reveal"><div><span>Name</span><strong>{profile.name}</strong></div><div><span>Location</span><strong>{profile.location}</strong></div><div><span>Social</span><div className="contact-socials"><a href={profile.github} target="_blank" rel="noreferrer"><Github size={18} /> GitHub</a><a href={profile.linkedin} target="_blank" rel="noreferrer"><Linkedin size={18} /> LinkedIn</a></div></div></div>
       </section>
     </main>
-    <footer><div><strong>Sachin Patadiya</strong><span>Flutter Developer • MERN Stack Developer</span></div><div className="footer-links"><a href={profile.github} target="_blank" rel="noreferrer">GitHub</a><a href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn</a></div><p>© {new Date().getFullYear()} Sachin Patadiya</p><span className="footer-signature">Built with passion and code.</span></footer>
+    <footer><div><strong>Sachin Patadiya</strong><span>Flutter Developer • Full Stack Developer</span></div><p>© {new Date().getFullYear()} Sachin Patadiya</p><span className="footer-signature">Built with passion and code.</span></footer>
     <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
   </div>;
 }

@@ -222,6 +222,47 @@ a {
     height: 100%
 }
 
+.scene-loader {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 16px;
+    background: var(--surface);
+    transition: opacity .5s ease, visibility .5s ease;
+}
+
+.scene-loader span {
+    width: 34px;
+    height: 34px;
+    border: 2px solid color-mix(in srgb, var(--accent) 25%, transparent);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: scene-loader-spin .8s linear infinite
+}
+
+.scene-loader p {
+    margin: 0;
+    color: var(--text-muted);
+    font: 9px 'DM Mono', monospace;
+    letter-spacing: .14em;
+    text-transform: uppercase
+}
+
+.scene-wrap--ready .scene-loader {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none
+}
+
+@keyframes scene-loader-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 .hero:after {
     content: "";
     position: absolute;
