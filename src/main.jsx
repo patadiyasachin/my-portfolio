@@ -80,6 +80,7 @@ function Scene({ theme, onReady }) {
 function App() {
   const root = useRef(null);
   const hero = useRef(null);
+  const lenisRef = useRef(null);
   const [theme, setTheme] = useState(() => { try { return localStorage.getItem('portfolio-theme') === 'dark' ? 'dark' : 'light'; } catch { return 'light'; } });
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('top');
@@ -94,11 +95,10 @@ function App() {
 
   useEffect(() => {
     const lenis = new Lenis({ lerp: 0.085, smoothWheel: true });
-    let raf;
-    const loop = (time) => { lenis.raf(time); raf = requestAnimationFrame(loop); };
-    raf = requestAnimationFrame(loop);
+    lenisRef.current = lenis;
     lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => lenis.raf(time * 1000));
+    const onTick = (time) => lenis.raf(time * 1000);
+    gsap.ticker.add(onTick);
     gsap.ticker.lagSmoothing(0);
     const ctx = gsap.context(() => {
       gsap.from('.nav', { y: -30, opacity: 0, duration: 1, ease: 'power3.out' });
@@ -108,7 +108,7 @@ function App() {
       gsap.utils.toArray('.reveal').forEach((el) => gsap.from(el, { y: 70, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 82%', once: true } }));
       gsap.utils.toArray('.timeline-item').forEach((el) => gsap.from(el, { x: -40, opacity: 0, duration: 0.7, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 85%', once: true } }));
     }, root);
-    return () => { ctx.revert(); cancelAnimationFrame(raf); lenis.destroy(); gsap.ticker.remove((time) => lenis.raf(time * 1000)); };
+    return () => { ctx.revert(); gsap.ticker.remove(onTick); lenis.destroy(); lenisRef.current = null; };
   }, []);
 
   useEffect(() => {
@@ -123,12 +123,25 @@ function App() {
 
   const toggleTheme = () => setTheme((current) => current === 'light' ? 'dark' : 'light');
   const closeMenu = () => setMenuOpen(false);
+  const navigateToSection = (event, id) => {
+    event.preventDefault();
+    closeMenu();
+    const target = document.getElementById(id);
+    if (!target) return;
+    window.history.pushState(null, '', `#${id}`);
+    const navHeight = document.querySelector('.nav')?.getBoundingClientRect().height ?? 0;
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(target, { offset: -navHeight, duration: 1.2 });
+    } else {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   return <div ref={root}>
     <nav className="nav" aria-label="Main navigation">
       <a className="brand" href="#top" aria-label="Sachin Patadiya home"><span className="brand-monogram" aria-hidden="true"><span>S</span><span>P</span></span><span className="brand-name">Sachin<br />Patadiya</span></a>
       <div className={`nav-links ${menuOpen ? 'nav-links--open' : ''}`}>
-        {navItems.map(([label, id]) => <a key={id} href={`#${id}`} className={activeSection === id ? 'active' : ''} onClick={closeMenu}>{label}</a>)}
+        {navItems.map(([label, id]) => <a key={id} href={`#${id}`} className={activeSection === id ? 'active' : ''} onClick={(event) => navigateToSection(event, id)}>{label}</a>)}
       </div>
       <div className="nav-actions">
         <button className="theme-toggle" type="button" onClick={toggleTheme} aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`} title={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}>{theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}</button>
@@ -140,7 +153,16 @@ function App() {
       <section ref={hero} id="top" className="hero">
         <div className={`scene-wrap ${sceneReady ? 'scene-wrap--ready' : ''}`}>
           <Scene theme={theme} onReady={() => setSceneReady(true)} />
-          {!sceneReady && <div className="scene-loader" role="status" aria-live="polite"><span /><p>Loading 3D experience</p></div>}
+          {!sceneReady && <div className="scene-loader" role="status" aria-live="polite">
+            <div className="scene-loader__visual" aria-hidden="true">
+              <span className="scene-loader__orbit scene-loader__orbit--outer" />
+              <span className="scene-loader__orbit scene-loader__orbit--inner" />
+              <span className="scene-loader__spark scene-loader__spark--one" />
+              <span className="scene-loader__spark scene-loader__spark--two" />
+              <span className="scene-loader__monogram">SP</span>
+            </div>
+            <div className="scene-loader__copy"><p>Crafting your experience</p><span>FLUTTER <i /> MERN <i /> 3D</span></div>
+          </div>}
         </div>
         <div className="hero-copy">
           <p className="eyebrow">FLUTTER • MERN • CREATIVE DEVELOPMENT</p>
