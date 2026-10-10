@@ -185,7 +185,7 @@ function App() {
 
       <section id="education" className="section education">
         <div className="section-heading reveal"><div><p className="eyebrow">06 / EDUCATION</p><h2>Learning that<br /><span>moves forward.</span></h2></div><p>Formal education and practical experience working alongside modern development tools.</p></div>
-        <div className="education-layout"><article className="education-card reveal"><span className="education-icon">B</span><div><p className="education-label">DEGREE</p><h3>{education.degree}</h3><p>{education.university}</p><small>{education.location}</small></div><span className="education-status">CURRENT</span></article><div className="certification-note reveal"><span>Certificates</span><p>No certificates are currently listed. When verified certificate material is available, it can be added here.</p></div></div>
+        <div className="education-layout"><article className="education-card reveal"><span className="education-icon">B</span><div><p className="education-label">DEGREE</p><h3>{education.degree}</h3><p>{education.university}</p><small>{education.location}</small></div><span className="education-status">COMPLETE</span></article><div className="certification-note reveal"><span>Certificates</span><p>No certificates are currently listed. When verified certificate material is available, it can be added here.</p></div></div>
       </section>
 
       <section id="contact" className="section contact">
